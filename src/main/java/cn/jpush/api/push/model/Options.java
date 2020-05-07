@@ -5,6 +5,7 @@ import com.google.gson.*;
 
 import cn.jiguang.common.ServiceHelper;
 import cn.jiguang.common.utils.Preconditions;
+import com.sun.org.apache.regexp.internal.RE;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -18,6 +19,7 @@ public class Options implements PushModel {
     private static final String BIG_PUSH_DURATION = "big_push_duration";
     private static final String APNS_COLLAPSE_ID = "apns_collapse_id";
     private static final String THIRD_PARTH_CHANNEl = "third_party_channel";
+    private static final String RETURN_INVALID_RID = "return_invalid_rid";
 
     private static final long NONE_TIME_TO_LIVE = -1;
 
@@ -25,6 +27,7 @@ public class Options implements PushModel {
     private final long overrideMsgId;
     private long timeToLive;
     private boolean apnsProduction;
+    private boolean returnInvalidRid;
     // minutes
     private int bigPushDuration;
     private String apnsCollapseId;
@@ -60,6 +63,7 @@ public class Options implements PushModel {
                     long overrideMsgId,
                     long timeToLive,
                     boolean apnsProduction,
+                    boolean returnInvalidRid,
                     int bigPushDuration,
                     String apnsCollapseId,
                     Map<String, Map<String, String>> thirdPartyChannel,
@@ -68,6 +72,7 @@ public class Options implements PushModel {
         this.overrideMsgId = overrideMsgId;
         this.timeToLive = timeToLive;
         this.apnsProduction = apnsProduction;
+        this.returnInvalidRid = returnInvalidRid;
         this.bigPushDuration = bigPushDuration;
         this.apnsCollapseId = apnsCollapseId;
         this.thirdPartyChannel = thirdPartyChannel;
@@ -88,6 +93,10 @@ public class Options implements PushModel {
 
     public void setApnsProduction(boolean apnsProduction) {
         this.apnsProduction = apnsProduction;
+    }
+
+    public void setReturnInvalidRid(boolean returnInvalidRid) {
+        this.returnInvalidRid = returnInvalidRid;
     }
 
     public void setTimeToLive(long timeToLive) {
@@ -116,6 +125,8 @@ public class Options implements PushModel {
         }
 
         json.add(APNS_PRODUCTION, new JsonPrimitive(apnsProduction));
+
+        json.add(RETURN_INVALID_RID, new JsonPrimitive(returnInvalidRid));
 
         if (bigPushDuration > 0) {
             json.add(BIG_PUSH_DURATION, new JsonPrimitive(bigPushDuration));
@@ -152,6 +163,7 @@ public class Options implements PushModel {
         private long overrideMsgId = 0;
         private long timeToLive = NONE_TIME_TO_LIVE;
         private boolean apnsProduction = false;
+        private boolean returnInvalidRid = false;
         private int bigPushDuration = 0;
         private String apnsCollapseId;
         private Map<String, Map<String, String>> thirdPartyChannel;
@@ -174,6 +186,11 @@ public class Options implements PushModel {
 
         public Builder setApnsProduction(boolean apnsProduction) {
             this.apnsProduction = apnsProduction;
+            return this;
+        }
+
+        public Builder setReturnInvalidRid(boolean returnInvalidRid) {
+            this.returnInvalidRid = returnInvalidRid;
             return this;
         }
 
@@ -243,7 +260,7 @@ public class Options implements PushModel {
                 sendno = ServiceHelper.generateSendno();
             }
 
-            return new Options(sendno, overrideMsgId, timeToLive, apnsProduction, bigPushDuration, apnsCollapseId, thirdPartyChannel, customData);
+            return new Options(sendno, overrideMsgId, timeToLive, apnsProduction, returnInvalidRid, bigPushDuration, apnsCollapseId, thirdPartyChannel, customData);
         }
     }
 

@@ -24,6 +24,9 @@ public class AndroidNotification extends PlatformNotification {
     private static final String CATEGORY = "category";
     private static final String LARGE_ICON = "large_icon";
     private static final String INTENT = "intent";
+    private static final String URI_ACTIVITY = "uri_activity";
+    private static final String URI_ACTION = "uri_action";
+    private static final String URI_FLAG = "uri_flag";
 
     private final String title;
     private final int builderId;
@@ -39,6 +42,9 @@ public class AndroidNotification extends PlatformNotification {
     private String category;
     private String large_icon;
     private JsonObject intent;
+	private String uri_activity;
+    private String uri_action;
+    private String uri_flag;
 
     private AndroidNotification(Object alert,
                                 String title,
@@ -53,6 +59,9 @@ public class AndroidNotification extends PlatformNotification {
                                 String large_icon,
                                 JsonObject intent,
                                 String channelId,
+                                String uriActivity,
+                                String uriAction,
+                                String uriFlag,
                                 Map<String, String> extras,
                                 Map<String, Number> numberExtras,
                                 Map<String, Boolean> booleanExtras,
@@ -72,6 +81,9 @@ public class AndroidNotification extends PlatformNotification {
         this.large_icon = large_icon;
         this.intent = intent;
         this.channelId = channelId;
+        this.uri_activity = uriActivity;
+        this.uri_action = uriAction;
+        this.uri_flag = uriFlag;
     }
 
     public static Builder newBuilder() {
@@ -149,6 +161,18 @@ public class AndroidNotification extends PlatformNotification {
         if (null != channelId) {
             json.add(CHANNEL_ID, new JsonPrimitive(channelId));
         }
+		
+		if (null != uri_activity) {
+            json.add(URI_ACTIVITY, new JsonPrimitive(uri_activity));
+        }
+
+        if (null != uri_action) {
+            json.add(URI_ACTION, new JsonPrimitive(uri_action));
+        }
+
+        if (null != uri_flag) {
+            json.add(URI_FLAG, new JsonPrimitive(uri_flag));
+        }
 
         return json;
     }
@@ -166,6 +190,9 @@ public class AndroidNotification extends PlatformNotification {
         private String large_icon;
         private JsonObject intent;
         private String channelId;
+        private String uri_activity;
+        private String uri_action;
+        private String uri_flag;
 
         @Override
         protected Builder getThis() {
@@ -249,6 +276,25 @@ public class AndroidNotification extends PlatformNotification {
             this.channelId = channelId;
             return this;
         }
+		
+		public String getUriActivity() {
+            return uri_activity;
+        }
+
+        public Builder setUriActivity(String uriActivity) {
+            this.uri_activity = uriActivity;
+            return this;
+        }
+
+        public Builder setUriFlag(String uriFlag) {
+            this.uri_flag = uriFlag;
+            return this;
+        }
+
+        public Builder setUriAction(String uriAction) {
+            this.uri_action = uriAction;
+            return this;
+        }
 
         @Override
         public AndroidNotification build() {
@@ -266,6 +312,9 @@ public class AndroidNotification extends PlatformNotification {
                     large_icon,
                     intent,
                     channelId,
+                    uri_activity,
+                    uri_action,
+                    uri_flag,
                     extrasBuilder,
                     numberExtrasBuilder,
                     booleanExtrasBuilder,
